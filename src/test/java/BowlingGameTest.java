@@ -14,7 +14,15 @@ public class BowlingGameTest {
 
     @Test
     void should_throw_exception_when_input_not_regular() {
-        Integer score[] = {1,11,4,5,6,4,5,5,10,0,1,7};
+        Integer score[] = {1,10,4,5,7,4,5,5,10,0,1,7};
+        assertThrows(RuntimeException.class, () -> {
+            bowlinggame.count(score);
+        });
+    }
+
+    @Test
+    void should_throw_exception_when_input_not_valid() {
+        Integer score[] = {2,6,4,5,6,4,10,3,1,2,7,10,5,3,6,4,10,1};
         assertThrows(RuntimeException.class, () -> {
             bowlinggame.count(score);
         });

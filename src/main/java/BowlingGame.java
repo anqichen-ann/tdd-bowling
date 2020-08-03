@@ -13,27 +13,35 @@ public class BowlingGame {
     public int count(Integer[] score) {
         List<Integer> scoreList = new ArrayList<>(score.length);
         Collections.addAll(scoreList,score);
-        for (int i = 0; i < flameNumber; i++){
-            if (scoreList.get(0) == maxScore) {
-                flameScore.add(countTopNumberScore(scoreList,3));
-                scoreList.remove(0);
-            }else if (countTopNumberScore(scoreList,2) == maxScore) {
-                flameScore.add(countTopNumberScore(scoreList,3));
-                scoreList.remove(0);
-                scoreList.remove(0);
-            }else if (countTopNumberScore(scoreList,2) < maxScore) {
-                flameScore.add(countTopNumberScore(scoreList,2));
-                scoreList.remove(0);
-                scoreList.remove(0);
-            }else {
-                throw new RuntimeException("input not valid");
+        try {
+            for (int i = 0; i < flameNumber; i++){
+                if (scoreList.get(0) == maxScore) {
+                    flameScore.add(countTopNumberScore(scoreList,3));
+                    scoreList.remove(0);
+                }else if (countTopNumberScore(scoreList,2) == maxScore) {
+                    flameScore.add(countTopNumberScore(scoreList,3));
+                    scoreList.remove(0);
+                    scoreList.remove(0);
+                }else if (countTopNumberScore(scoreList,2) < maxScore) {
+                    flameScore.add(countTopNumberScore(scoreList,2));
+                    scoreList.remove(0);
+                    scoreList.remove(0);
+                }else {
+                    throw new RuntimeException("input not valid");
+                }
             }
+        }catch (RuntimeException error) {
+            throw new RuntimeException("input not valid");
         }
+
         int result = flameScore.stream().reduce(0, Integer::sum);
         return result;
     }
 
     public int countTopNumberScore(List<Integer> scoreList,int number) {
+        if (scoreList.size() < number) {
+            throw new RuntimeException("input is short");
+        }
         int result = scoreList.stream().limit(number).reduce(Integer::sum).get();
         return result;
     }
