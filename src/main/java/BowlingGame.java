@@ -5,29 +5,36 @@ import java.util.List;
 import java.util.stream.Stream;
 
 public class BowlingGame {
-public Integer[] flameScore = new Integer[10];
+    public final int flameNumber = 10;
+    public final int maxScore = 10;
+
+    public List<Integer> flameScore = new ArrayList<>();
 
     public int count(Integer[] score) {
         List<Integer> scoreList = new ArrayList<>(score.length);
         Collections.addAll(scoreList,score);
-        for (int i = 0; i < 10; i++){
-            if (scoreList.get(0) == 10) {
-                flameScore[i] = scoreList.get(0)+scoreList.get(1)+scoreList.get(2);
+        for (int i = 0; i < flameNumber; i++){
+            if (scoreList.get(0) == maxScore) {
+                flameScore.add(countTopNumberScore(scoreList,3));
                 scoreList.remove(0);
-            }else if (scoreList.get(0) + scoreList.get(1) == 10) {
-                flameScore[i] = scoreList.get(0)+scoreList.get(1)+scoreList.get(2);
+            }else if (countTopNumberScore(scoreList,2) == maxScore) {
+                flameScore.add(countTopNumberScore(scoreList,3));
                 scoreList.remove(0);
                 scoreList.remove(0);
-            }else if (scoreList.get(0) + scoreList.get(1) < 10) {
-                flameScore[i] = scoreList.get(0)+scoreList.get(1);
+            }else if (countTopNumberScore(scoreList,2) < maxScore) {
+                flameScore.add(countTopNumberScore(scoreList,2));
                 scoreList.remove(0);
                 scoreList.remove(0);
             }else {
                 throw new RuntimeException("input not valid");
             }
         }
-        Stream<Integer> scoreStream = Arrays.stream(flameScore);
-        int result = scoreStream.reduce(0, Integer::sum);
+        int result = flameScore.stream().reduce(0, Integer::sum);
+        return result;
+    }
+
+    public int countTopNumberScore(List<Integer> scoreList,int number) {
+        int result = scoreList.stream().limit(number).reduce(Integer::sum).get();
         return result;
     }
 }
